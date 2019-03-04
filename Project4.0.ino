@@ -1,18 +1,20 @@
 
 #include <math.h>
 
+float temperature;
+
 const int B = 4275;               // B value of the thermistor
 const int R0 = 100000;            // R0 = 100k
-const int pinTempSensor = A0;
+const int pinTempSensor = A2;
 
 #include <Wire.h>
 #include "rgb_lcd.h"
 
 rgb_lcd lcd;
 
-const int colorR = 255;
-const int colorG = 0;
-const int colorB = 0;
+ int colorR = 0;
+ int colorG = 255;
+ int colorB = 0;
 
 void setup() 
 {
@@ -24,7 +26,9 @@ void setup()
     // Print a message to the LCD.
     lcd.print("temperature = ");
 
-    delay(1000);
+    delay(100);
+
+   
 }
 
 void loop() {
@@ -34,9 +38,31 @@ void loop() {
     float R = 1023.0/a-1.0;
     R = R0*R;
 
-    float temperature = 1.0/(log(R/R0)/B+1/298.15)-273.15;
+    temperature = 1.0/(log(R/R0)/B+1/298.15)-273.15;
     lcd.println(temperature);
 
+    if(temperature>25&&temperature<30)
+    {
+        colorR=0;
+        colorG=255;
+        colorB=0;
+        lcd.println(" Okay!    ");
+    }
+ else if(temperature>30)
+      {
+        colorR=255;
+        colorG=0;
+        colorB=0;
+        lcd.println(" Too hot!!");
+      }
+    else if(temperature<25)
+      {
+        colorR=0;
+        colorG=0;
+        colorB=255;
+        lcd.println(" Too Cold!");
+      }
+           lcd.setRGB(colorR, colorG, colorB);
     delay(100);
 }
 
