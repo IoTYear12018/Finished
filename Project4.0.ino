@@ -16,6 +16,8 @@ rgb_lcd lcd;
  int colorG = 255;
  int colorB = 0;
 
+int lowThreshold=25;
+int highThreshold=30;
 void setup() 
 {
     // set up the LCD's number of columns and rows:
@@ -41,26 +43,26 @@ void loop() {
     temperature = 1.0/(log(R/R0)/B+1/298.15)-273.15;
     lcd.println(temperature);
 
-    if(temperature>25&&temperature<30)
+    if(temperature>lowThreshold&&temperature<highThreshold)
     {
         colorR=0;
         colorG=255;
         colorB=0;
         lcd.println(" Okay!    ");
     }
- else if(temperature>30)
+ else if(temperature>highThreshold)
       {
         colorR=255;
         colorG=0;
         colorB=0;
         lcd.println(" Too hot!!");
       }
-    else if(temperature<25)
+    else if(temperature<lowThreshold)
       {
         colorR=0;
         colorG=0;
         colorB=255;
-        lcd.println(" Too Cold!");
+        lcd.println("//;Too Cold!");
       }
            lcd.setRGB(colorR, colorG, colorB);
     delay(100);
